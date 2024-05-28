@@ -12,10 +12,10 @@ async function main() {
     // Example usage:
 
         // Hardcoded IDs for existing documents in your database
-        const userId = "665534a7a74a9a18cf5d5db2"; // Replace with an actual user ID
-        const eventId = "665534a7a74a9a18cf5d5db3"; // Replace with an actual event ID
-        const categoryId = "665534a7a74a9a18cf5d5db4"; // Replace with an actual category ID
-        const mediaId = "665534a7a74a9a18cf5d5db5"; // Replace with an actual media ID
+        const userId = "66553928906a268ce13e70ff"; // Replace with an actual user ID
+        const eventId = "66553c60664651665a83f404"; // Replace with an actual event ID
+        const categoryId = "66553c61664651665a83f405"; // Replace with an actual category ID
+        const mediaId = "66553cb854e8757e8cfdb07c"; // Replace with an actual media ID
   
     // Retrieve and log the documents by their IDs
     const user = await userOperations.getUserById(userId);
