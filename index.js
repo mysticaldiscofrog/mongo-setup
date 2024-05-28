@@ -1,37 +1,67 @@
-const { insertUser, insertEvent, insertCategory, insertMedia } = require('./dbOperations');
-const { MongoClient } = require('mongodb');
-require('dotenv').config();
+const userOperations = require('./operations/userOperations');
+const eventOperations = require('./operations/eventOperations');
+const categoryOperations = require('./operations/categoryOperations');
+const mediaOperations = require('./operations/mediaOperations');
+const connectDB = require('./connect');
 
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: "1",
-    strict: true,
-    deprecationErrors: true,
-  }
-});
+async function main() {
+  const db = await connectDB();
+  const client = db.client; // Capture the client from the database connection
 
-async function run() {
   try {
-    await client.connect();
-
     // Example usage:
+
+        // Hardcoded IDs for existing documents in your database
+        const userId = "665534a7a74a9a18cf5d5db2"; // Replace with an actual user ID
+        const eventId = "665534a7a74a9a18cf5d5db3"; // Replace with an actual event ID
+        const categoryId = "665534a7a74a9a18cf5d5db4"; // Replace with an actual category ID
+        const mediaId = "665534a7a74a9a18cf5d5db5"; // Replace with an actual media ID
+  
+    // Retrieve and log the documents by their IDs
+    const user = await userOperations.getUserById(userId);
+    console.log("User:", user);
+
+    const event = await eventOperations.getEventById(eventId);
+    console.log("Event:", event);
+
+    const category = await categoryOperations.getCategoryById(categoryId);
+    console.log("Category:", category);
+
+    const media = await mediaOperations.getMediaById(mediaId);
+    console.log("Media:", media);
+
+    console.log("All operations completed successfully.");
+  } catch (error) {
+    console.error("An error occurred:", error);
+  } finally {
+    await client.close();
+    console.log("MongoDB client closed.");
+    process.exit(0);
+  }
+}
+
+main().catch(console.dir);
+
+
+  
+/*
     const exampleUser = {
-      email: "user@example.com",
-      name: "User Name",
-      username: "username",
+      email: "3user@example.com",
+      name: "3User Name",
+      username: "3username",
       title: "Title",
       bio: "Bio",
       city: "City",
       zipcode: "Zipcode"
     };
-    await insertUser(exampleUser);
+    const insertedUserResult = await userOperations.insertUser(exampleUser);
+    const userId = insertedUserResult.insertedId.toString();
 
     const exampleEvent = {
-      name: "Event Name",
-      description: "Description",
-      start_time: "2024-06-01T10:00:00",
-      end_time: "2024-06-01T12:00:00",
+      name: "Event Name 3",
+      description: "Description 3",
+      start_time: "4024-06-01T10:00:00",
+      end_time: "4024-06-01T12:00:00",
       flags: {
         is_skill: true,
         is_interest: false,
@@ -44,29 +74,21 @@ async function run() {
       },
       category_id: "category1"
     };
-    await insertEvent(exampleEvent);
+    const insertedEventResult = await eventOperations.insertEvent(exampleEvent);
+    const eventId = insertedEventResult.insertedId.toString();
 
     const exampleCategory = {
-      name: "Category Name"
+      name: "3Category Name"
     };
-    await insertCategory(exampleCategory);
+    const insertedCategoryResult = await categoryOperations.insertCategory(exampleCategory);
+    const categoryId = insertedCategoryResult.insertedId.toString();
 
     const exampleMedia = {
-      event_id: "event1",
-      url: "http://example.com/media.jpg",
-      type: "image",
+      event_id: eventId,
+      url: "http://3example.com/media.jpg",
+      type: "3image",
       description: "An example image"
     };
-    await insertMedia(exampleMedia);
-
-    console.log("All operations completed successfully.");
-  } catch (error) {
-    console.error("An error occurred:", error);
-  } finally {
-    await client.close();
-    console.log("MongoDB client closed.");
-    process.exit(0);
-  }
-}
-
-run().catch(console.dir);
+    const insertedMediaResult = await mediaOperations.insertMedia(exampleMedia);
+    const mediaId = insertedMediaResult.insertedId.toString();
+*/
