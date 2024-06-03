@@ -15,7 +15,7 @@ async function connectDB() {
   if (!client.isConnected) {
     await client.connect();
   }
-  const db = client.db("myDatabase");
+  const db = client.db("ourDatabase");
   db.client = client; // Attach client to db object for later access
   return db;
 }
