@@ -11,24 +11,27 @@ async function main() {
 
   try {
     // Insert users
-    const insertedUsers = [];
-    for (const user of users) {
-      const insertedUserResult = await userOperations.insertUser(user);
-      const userId = insertedUserResult.insertedId.toString();
-      insertedUsers.push(userId);
-      console.log("Inserted User ID:", userId);
-    }
+const insertedUsers = [];
+for (const user of users) {
+  const insertedUserResult = await userOperations.insertUser(user);
+  const userId = insertedUserResult.insertedId.toString();
+  insertedUsers.push(userId);
+  console.log("Inserted User ID:", userId);
+}
 
-    // Insert events
-    for (const event of events) {
-      event.user_references = [insertedUsers[0]]; // Example: associate first user with the event
-      event.modified_by = insertedUsers[0]; // Example: modified by first user
-      event.attendees = [insertedUsers[0]]; // Example: first user attends the event
-      event.participation_status = [{ user_id: insertedUsers[0], status: "confirmed" }];
-      const insertedEventResult = await eventOperations.insertEvent(event);
-      const eventId = insertedEventResult.insertedId.toString();
-      console.log("Inserted Event ID:", eventId);
-    }
+// Insert events
+const insertedEvents = [];
+for (const event of events) {
+  event.user_references = [insertedUsers[0]]; // Example: associate first user with the event
+  event.modified_by = insertedUsers[0]; // Example: modified by first user
+  event.attendees = [insertedUsers[0]]; // Example: first user attends the event
+  event.participation_status = [{ user_id: insertedUsers[0], status: "confirmed" }];
+  const insertedEventResult = await eventOperations.insertEvent(event);
+  const eventId = insertedEventResult.insertedId.toString();
+  insertedEvents.push(eventId);
+  console.log("Inserted Event ID:", eventId);
+}
+
 
     // Insert categories
     for (const category of categories) {

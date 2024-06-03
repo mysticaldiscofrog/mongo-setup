@@ -95,7 +95,11 @@ async function main() {
       outputData.media.push(mediaDocument);
       console.log(mediaDocument);
     }
+    
+    // Log the first document of each type
+    console.log(`Here they are: ${JSON.stringify(outputData.users[0])}, /n ${JSON.stringify(outputData.events[0])}, /n ${JSON.stringify(outputData.categories[0])}, /n ${JSON.stringify(outputData.media[0])} /n `);
 
+    
     // Save output data to data.json
     fs.writeFileSync('data.json', JSON.stringify(outputData, null, 2), 'utf-8');
     console.log("Data saved to data.json");
