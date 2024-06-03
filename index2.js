@@ -1,23 +1,41 @@
 const fs = require('fs');
-const userOperations = require('./operations/userOperations');
-const eventOperations = require('./operations/eventOperations');
-const categoryOperations = require('./operations/categoryOperations');
-const mediaOperations = require('./operations/mediaOperations');
 const connectDB = require('./connect');
-const { users, events, categories, media } = require('./testData');
 const { ObjectId } = require('mongodb');
-
-async function retrieveDocumentById(collection, id) {
-  const db = await connectDB();
-  return db.collection(collection).findOne({ _id: new ObjectId(id) });
-}
+const getUsers = require('./actions/getAllUsers');
 
 async function main() {
   const db = await connectDB();
   const client = db.client; // Capture the client from the database connection
 
   try {
-    // Insert users
+    // Retrieve and log full documents
+    console.log("Retrieving full documents...");
+    const users = await getUsers();
+    console.log(users[0]);
+
+    const outputData = {
+      users: users,
+      events: [],
+      categories: [],
+      media: []
+    };
+
+    console.log("All operations completed successfully.");
+  } catch (error) {
+    console.error("An error occurred:", error);
+  } finally {
+    await client.close();
+    console.log("MongoDB client closed.");
+    process.exit(0);
+  }
+}
+
+main().catch(console.dir);
+
+
+
+/*
+
     const insertedUsers = [];
     for (const user of users) {
       const insertedUserResult = await userOperations.insertUser(user);
@@ -58,60 +76,47 @@ async function main() {
       console.log("Inserted Media ID:", mediaId);
     }
 
-    // Retrieve and log full documents
-    console.log("Retrieving full documents...");
+    */
 
-    const outputData = {
-      users: [],
-      events: [],
-      categories: [],
-      media: []
-    };
 
+    /*
     console.log("Users:");
     for (const userId of insertedUsers) {
       const userDocument = await retrieveDocumentById('Users', userId);
       outputData.users.push(userDocument);
-      console.log(userDocument);
+      console.log(userDocument[0]);
     }
+
+
 
     console.log("Events:");
     for (const eventId of insertedEvents) {
       const eventDocument = await retrieveDocumentById('Events', eventId);
       outputData.events.push(eventDocument);
-      console.log(eventDocument);
+      console.log(eventDocument[0]);
     }
 
     console.log("Categories:");
     for (const categoryId of insertedCategories) {
       const categoryDocument = await retrieveDocumentById('Categories', categoryId);
       outputData.categories.push(categoryDocument);
-      console.log(categoryDocument);
+      console.log(categoryDocument[0]);
     }
 
     console.log("Media:");
     for (const mediaId of insertedMedia) {
       const mediaDocument = await retrieveDocumentById('Media', mediaId);
       outputData.media.push(mediaDocument);
-      console.log(mediaDocument);
+      console.log(mediaDocument[0]);
     }
     
     // Log the first document of each type
-    console.log(`Here they are: ${JSON.stringify(outputData.users[0])}, /n ${JSON.stringify(outputData.events[0])}, /n ${JSON.stringify(outputData.categories[0])}, /n ${JSON.stringify(outputData.media[0])} /n `);
+    //console.log(`Here they are: ${JSON.stringify(outputData.users[0])}, /n ${JSON.stringify(outputData.events[0])}, /n ${JSON.stringify(outputData.categories[0])}, /n ${JSON.stringify(outputData.media[0])} /n `);
 
     
     // Save output data to data.json
     fs.writeFileSync('data.json', JSON.stringify(outputData, null, 2), 'utf-8');
     console.log("Data saved to data.json");
 
-    console.log("All operations completed successfully.");
-  } catch (error) {
-    console.error("An error occurred:", error);
-  } finally {
-    await client.close();
-    console.log("MongoDB client closed.");
-    process.exit(0);
-  }
-}
 
-main().catch(console.dir);
+    */
