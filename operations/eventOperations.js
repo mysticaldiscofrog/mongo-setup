@@ -2,32 +2,58 @@ const connectDB = require('../connect');
 const { ObjectId } = require('mongodb');
 
 const eventTemplate = {
+  event_id: "",
+  topic_id: "",
   name: "",
   description: "",
-  start_time: null,
-  end_time: null,
+  end_time: new Date(),
   flags: {
-    is_skill: null,
-    is_interest: null,
-    is_intention: null,
-    is_in_person: null,
-    is_beginner: null,
-    is_intermediate: null,
-    is_advanced: null,
-    is_contribution: null
+    is_skill: false,
+    is_interest: false,
+    is_intention: false,
+    is_in_person: false,
+    is_beginner: false,
+    is_intermediate: false,
+    is_advanced: false,
+    is_contribution: false
   },
-  category_id: "",
-  created_at: null,
-  updated_at: null
+  created_at: new Date(),
+  user_references: [],
+  required_skills: [],
+  root_event: false,
+  root_reference: null,
+  legacy_key: null,
+  modified_by: "",
+  modified_at: new Date(),
+  change_description: "",
+  attendees: [],
+  participation_status: [],
+  categories: [],
+  feedback: [],
+  external_ids: [],
+  languages_supported: [],
+  location_specifics: {
+    country: "",
+    region: "",
+    city: "",
+    latitude: 0.0,
+    longitude: 0.0
+  },
+  sustainability_focus: [],
+  partner_organizations: [],
+  collaboration_level: "",
+  tech_requirements: [],
+  tools_provided: [],
+  governance_model: "",
+  funding_source: "",
+  roles: [],
+  permissions: [],
+  preferred_language: ""
 };
 
 async function insertEvent(event) {
   const db = await connectDB();
   const newEvent = { ...eventTemplate, ...event, _id: new ObjectId() };
-  newEvent.created_at = new Date();
-  newEvent.updated_at = new Date();
-  newEvent.start_time = new Date(event.start_time);
-  newEvent.end_time = new Date(event.end_time);
   return await db.collection("Events").insertOne(newEvent);
 }
 
@@ -38,7 +64,7 @@ async function getEventById(id) {
 
 async function updateEvent(id, updatedEvent) {
   const db = await connectDB();
-  updatedEvent.updated_at = new Date();
+  updatedEvent.modified_at = new Date();
   await db.collection("Events").updateOne({ _id: new ObjectId(id) }, { $set: updatedEvent });
 }
 

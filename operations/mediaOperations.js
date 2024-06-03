@@ -2,16 +2,17 @@ const connectDB = require('../connect');
 const { ObjectId } = require('mongodb');
 
 const mediaTemplate = {
+  media_id: "",
   event_id: "",
   url: "",
   type: "",
   description: "",
-  created_at: null
+  created_at: new Date()
 };
 
 async function insertMedia(media) {
   const db = await connectDB();
-  const newMedia = { ...mediaTemplate, ...media, _id: new ObjectId(), created_at: new Date() };
+  const newMedia = { ...mediaTemplate, ...media, _id: new ObjectId() };
   return await db.collection("Media").insertOne(newMedia);
 }
 
@@ -22,6 +23,7 @@ async function getMediaById(id) {
 
 async function updateMedia(id, updatedMedia) {
   const db = await connectDB();
+  updatedMedia.updated_at = new Date();
   await db.collection("Media").updateOne({ _id: new ObjectId(id) }, { $set: updatedMedia });
 }
 

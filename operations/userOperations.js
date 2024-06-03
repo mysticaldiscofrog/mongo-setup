@@ -2,6 +2,7 @@ const connectDB = require('../connect');
 const { ObjectId } = require('mongodb');
 
 const userTemplate = {
+  user_id: "",
   email: "",
   name: "",
   username: "",
@@ -16,7 +17,12 @@ const userTemplate = {
   skills: [],
   interests: [],
   intentions: [],
-  contributions: []
+  contributions: [],
+  media: [],
+  opportunities: [],
+  legacy_keys: [],
+  created_at: new Date(),
+  updated_at: new Date()
 };
 
 async function insertUser(user) {
@@ -32,6 +38,7 @@ async function getUserById(id) {
 
 async function updateUser(id, updatedUser) {
   const db = await connectDB();
+  updatedUser.updated_at = new Date();
   await db.collection("Users").updateOne({ _id: new ObjectId(id) }, { $set: updatedUser });
 }
 

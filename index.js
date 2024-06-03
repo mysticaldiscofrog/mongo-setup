@@ -9,26 +9,98 @@ async function main() {
   const client = db.client; // Capture the client from the database connection
 
   try {
-    // Example usage:
+    // Insert a new user
+    const exampleUser = {
+      email: "user@example.com",
+      name: "User Name",
+      username: "username",
+      title: "Title",
+      bio: "Bio",
+      city: "City",
+      zipcode: "12345",
+      location: {
+        latitude: 34.0522,
+        longitude: -118.2437
+      },
+      skills: ["JavaScript", "Node.js"],
+      interests: ["coding", "hiking"],
+      intentions: ["learn more about AI", "travel more"],
+      contributions: ["open source projects"],
+      media: ["media1", "media2"],
+      opportunities: ["opportunity1", "opportunity2"],
+      legacy_keys: ["legacy1", "legacy2"]
+    };
+    const insertedUserResult = await userOperations.insertUser(exampleUser);
+    const userId = insertedUserResult.insertedId.toString();
+    console.log("Inserted User ID:", userId);
 
-        // Hardcoded IDs for existing documents in your database
-        const userId = "66553928906a268ce13e70ff"; // Replace with an actual user ID
-        const eventId = "66553c60664651665a83f404"; // Replace with an actual event ID
-        const categoryId = "66553c61664651665a83f405"; // Replace with an actual category ID
-        const mediaId = "66553cb854e8757e8cfdb07c"; // Replace with an actual media ID
-  
-    // Retrieve and log the documents by their IDs
-    const user = await userOperations.getUserById(userId);
-    console.log("User:", user);
+    // Insert a new event
+    const exampleEvent = {
+      topic_id: "exampleTopicId",
+      name: "Event Name",
+      description: "Event Description",
+      flags: {
+        is_skill: true,
+        is_interest: false,
+        is_intention: false,
+        is_in_person: true,
+        is_beginner: true,
+        is_intermediate: false,
+        is_advanced: false,
+        is_contribution: false
+      },
+      user_references: [userId],
+      required_skills: ["public speaking"],
+      root_event: true,
+      modified_by: userId,
+      modified_at: new Date(),
+      change_description: "Initial creation",
+      attendees: [userId],
+      participation_status: [{ user_id: userId, status: "confirmed" }],
+      categories: ["education", "technology"],
+      feedback: [{ user_id: userId, rating: 5, comments: "Great event!" }],
+      external_ids: ["google_calendar_event_id"],
+      languages_supported: ["English"],
+      location_specifics: {
+        country: "USA",
+        region: "California",
+        city: "Los Angeles",
+        latitude: 34.0522,
+        longitude: -118.2437
+      },
+      sustainability_focus: ["education"],
+      partner_organizations: ["org1"],
+      collaboration_level: "local",
+      tech_requirements: ["projector"],
+      tools_provided: ["handouts"],
+      governance_model: "community-led",
+      funding_source: "sponsorship",
+      roles: ["admin"],
+      permissions: ["create_event"],
+      preferred_language: "English"
+    };
+    const insertedEventResult = await eventOperations.insertEvent(exampleEvent);
+    const eventId = insertedEventResult.insertedId.toString();
+    console.log("Inserted Event ID:", eventId);
 
-    const event = await eventOperations.getEventById(eventId);
-    console.log("Event:", event);
+    // Insert a new category
+    const exampleCategory = {
+      name: "Category Name"
+    };
+    const insertedCategoryResult = await categoryOperations.insertCategory(exampleCategory);
+    const categoryId = insertedCategoryResult.insertedId.toString();
+    console.log("Inserted Category ID:", categoryId);
 
-    const category = await categoryOperations.getCategoryById(categoryId);
-    console.log("Category:", category);
-
-    const media = await mediaOperations.getMediaById(mediaId);
-    console.log("Media:", media);
+    // Insert a new media
+    const exampleMedia = {
+      event_id: eventId,
+      url: "http://example.com/media.jpg",
+      type: "image",
+      description: "An example image"
+    };
+    const insertedMediaResult = await mediaOperations.insertMedia(exampleMedia);
+    const mediaId = insertedMediaResult.insertedId.toString();
+    console.log("Inserted Media ID:", mediaId);
 
     console.log("All operations completed successfully.");
   } catch (error) {
@@ -41,54 +113,3 @@ async function main() {
 }
 
 main().catch(console.dir);
-
-
-  
-/*
-    const exampleUser = {
-      email: "3user@example.com",
-      name: "3User Name",
-      username: "3username",
-      title: "Title",
-      bio: "Bio",
-      city: "City",
-      zipcode: "Zipcode"
-    };
-    const insertedUserResult = await userOperations.insertUser(exampleUser);
-    const userId = insertedUserResult.insertedId.toString();
-
-    const exampleEvent = {
-      name: "Event Name 3",
-      description: "Description 3",
-      start_time: "4024-06-01T10:00:00",
-      end_time: "4024-06-01T12:00:00",
-      flags: {
-        is_skill: true,
-        is_interest: false,
-        is_intention: false,
-        is_in_person: true,
-        is_beginner: true,
-        is_intermediate: false,
-        is_advanced: false,
-        is_contribution: false
-      },
-      category_id: "category1"
-    };
-    const insertedEventResult = await eventOperations.insertEvent(exampleEvent);
-    const eventId = insertedEventResult.insertedId.toString();
-
-    const exampleCategory = {
-      name: "3Category Name"
-    };
-    const insertedCategoryResult = await categoryOperations.insertCategory(exampleCategory);
-    const categoryId = insertedCategoryResult.insertedId.toString();
-
-    const exampleMedia = {
-      event_id: eventId,
-      url: "http://3example.com/media.jpg",
-      type: "3image",
-      description: "An example image"
-    };
-    const insertedMediaResult = await mediaOperations.insertMedia(exampleMedia);
-    const mediaId = insertedMediaResult.insertedId.toString();
-*/

@@ -11,7 +11,7 @@ const client = new MongoClient(uri, {
   }
 });
 
-// Placeholder for user structure
+// Updated user structure
 const userTemplate = {
   user_id: "",
   email: "",
@@ -28,45 +28,79 @@ const userTemplate = {
   skills: [],
   interests: [],
   intentions: [],
-  contributions: []
+  contributions: [],
+  media: [],
+  opportunities: [],
+  legacy_keys: [],
+  created_at: new Date(),
+  updated_at: new Date()
 };
 
-// Placeholder for event structure
+// Updated event structure
 const eventTemplate = {
   event_id: "",
+  topic_id: "",
   name: "",
   description: "",
-  start_time: null,
-  end_time: null,
+  end_time: new Date(),
   flags: {
-    is_skill: null,
-    is_interest: null,
-    is_intention: null,
-    is_in_person: null,
-    is_beginner: null,
-    is_intermediate: null,
-    is_advanced: null,
-    is_contribution: null
+    is_skill: false,
+    is_interest: false,
+    is_intention: false,
+    is_in_person: false,
+    is_beginner: false,
+    is_intermediate: false,
+    is_advanced: false,
+    is_contribution: false
   },
-  category_id: "",
-  created_at: null,
-  updated_at: null
+  created_at: new Date(),
+  user_references: [],
+  required_skills: [],
+  root_event: false,
+  root_reference: null,
+  legacy_key: null,
+  modified_by: "",
+  modified_at: new Date(),
+  change_description: "",
+  attendees: [],
+  participation_status: [],
+  categories: [],
+  feedback: [],
+  external_ids: [],
+  languages_supported: [],
+  location_specifics: {
+    country: "",
+    region: "",
+    city: "",
+    latitude: 0.0,
+    longitude: 0.0
+  },
+  sustainability_focus: [],
+  partner_organizations: [],
+  collaboration_level: "",
+  tech_requirements: [],
+  tools_provided: [],
+  governance_model: "",
+  funding_source: "",
+  roles: [],
+  permissions: [],
+  preferred_language: ""
 };
 
-// Placeholder for category structure
+// Updated category structure
 const categoryTemplate = {
   category_id: "",
   name: ""
 };
 
-// Placeholder for media structure
+// Updated media structure
 const mediaTemplate = {
   media_id: "",
   event_id: "",
   url: "",
   type: "",
   description: "",
-  created_at: null
+  created_at: new Date()
 };
 
 async function connectDB() {
@@ -86,16 +120,14 @@ async function insertEvent(event) {
   const db = await connectDB();
   const newEvent = { ...eventTemplate, ...event, event_id: generateId() };
   newEvent.created_at = new Date();
-  newEvent.updated_at = new Date();
-  newEvent.start_time = new Date(event.start_time);
-  newEvent.end_time = new Date(event.end_time);
+  newEvent.modified_at = new Date();
   await db.collection("Events").insertOne(newEvent);
 }
 
 async function insertCategory(category) {
   const db = await connectDB();
   const newCategory = { ...categoryTemplate, ...category, category_id: generateId() };
-  await db.collection("MainCategories").insertOne(newCategory);
+  await db.collection("Categories").insertOne(newCategory);
 }
 
 async function insertMedia(media) {
